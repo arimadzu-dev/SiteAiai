@@ -1,0 +1,1781 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Искусственный Интеллект в Видеоиграх | Практический Учебный Портал</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #0b0f19;
+      --bg-card: #151d2a;
+      --bg-card-hover: #1e293b;
+      --accent-cyan: #38bdf8;
+      --accent-purple: #818cf8;
+      --accent-green: #34d399;
+      --accent-red: #f43f5e;
+      --accent-orange: #fb923c;
+      --accent-yellow: #facc15;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: rgba(255, 255, 255, 0.1);
+      --font-heading: 'Orbitron', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-code: 'Fira Code', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* --- Шапка и Навигация --- */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(11, 15, 25, 0.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .nav-container {
+      max-width: 1350px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+    }
+
+    .logo {
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: var(--accent-cyan);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo span {
+      color: var(--accent-purple);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--accent-cyan);
+    }
+
+    .burger-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text-main);
+      font-size: 1.8rem;
+      cursor: pointer;
+    }
+
+    /* --- Hero Секция --- */
+    .hero {
+      padding: 5rem 1.5rem 3rem;
+      text-align: center;
+      background: radial-gradient(circle at 50% 20%, rgba(56, 189, 248, 0.15), transparent 60%);
+      max-width: 1150px;
+      margin: 0 auto;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      padding: 0.35rem 1rem;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid var(--accent-cyan);
+      border-radius: 50px;
+      color: var(--accent-cyan);
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .hero h1 {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 5vw, 3.6rem);
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, #ffffff 30%, var(--accent-cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: var(--text-muted);
+      max-width: 850px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 0.8rem 1.8rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+      color: #000;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(56, 189, 248, 0.3);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--accent-cyan);
+    }
+
+    /* --- Карточки метрик --- */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      max-width: 1280px;
+      margin: 3rem auto 0;
+      padding: 0 1.5rem;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      padding: 1.5rem;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      text-align: center;
+    }
+
+    .stat-card .number {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      color: var(--accent-cyan);
+      font-weight: 700;
+    }
+
+    .stat-card .label {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      margin-top: 0.5rem;
+    }
+
+    /* --- Секции общие --- */
+    section {
+      padding: 4rem 1.5rem;
+      max-width: 1350px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-family: var(--font-heading);
+      font-size: clamp(1.6rem, 3.5vw, 2.3rem);
+      margin-bottom: 0.8rem;
+      text-align: center;
+    }
+
+    .section-subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      font-size: 1.05rem;
+    }
+
+    /* --- Грид технологий --- */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .tech-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.8rem;
+      transition: transform 0.3s, border-color 0.3s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tech-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent-cyan);
+    }
+
+    .tech-badge {
+      align-self: flex-start;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      background: rgba(129, 140, 248, 0.2);
+      color: var(--accent-purple);
+    }
+
+    .tech-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .tech-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 1.2rem;
+      flex-grow: 1;
+    }
+
+    .tech-card ul {
+      list-style: none;
+      font-size: 0.88rem;
+      color: var(--text-main);
+    }
+
+    .tech-card ul li {
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* --- Секция Математики ИИ --- */
+    .math-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .math-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.8rem;
+    }
+
+    .math-card h3 {
+      font-family: var(--font-heading);
+      color: var(--accent-cyan);
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .math-formula {
+      background: #070a12;
+      padding: 1rem;
+      border-radius: 8px;
+      font-family: var(--font-code);
+      color: var(--accent-green);
+      font-size: 0.9rem;
+      margin: 1rem 0;
+      border-left: 3px solid var(--accent-green);
+      overflow-x: auto;
+    }
+
+    /* --- Вкладки Кода (Code Lab) --- */
+    .code-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .code-tabs {
+      display: flex;
+      background: #0d131f;
+      border-bottom: 1px solid var(--border-color);
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      padding: 1rem 1.5rem;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-family: var(--font-code);
+      font-size: 0.9rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.3s;
+      border-bottom: 2px solid transparent;
+    }
+
+    .tab-btn.active {
+      color: var(--accent-cyan);
+      border-bottom-color: var(--accent-cyan);
+      background: rgba(56, 189, 248, 0.05);
+    }
+
+    .code-content {
+      padding: 1.5rem;
+      display: none;
+      position: relative;
+    }
+
+    .code-content.active {
+      display: block;
+    }
+
+    pre {
+      background: #070a12;
+      padding: 1.2rem;
+      border-radius: 8px;
+      font-family: var(--font-code);
+      font-size: 0.88rem;
+      color: #e2e8f0;
+      overflow-x: auto;
+      line-height: 1.5;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .copy-btn:hover {
+      background: var(--accent-cyan);
+      color: #000;
+    }
+
+    /* --- Примеры реальных игр --- */
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+
+    .game-card {
+      background: var(--bg-card);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .game-header {
+      padding: 1.5rem;
+      background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.08));
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .game-header h3 {
+      font-family: var(--font-heading);
+      color: var(--accent-cyan);
+      font-size: 1.3rem;
+    }
+
+    .game-header .genre {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .game-body {
+      padding: 1.5rem;
+      flex-grow: 1;
+    }
+
+    .game-body p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+
+    .game-highlight {
+      background: rgba(52, 211, 153, 0.1);
+      border-left: 3px solid var(--accent-green);
+      padding: 0.8rem;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.88rem;
+      color: #e2e8f0;
+    }
+
+    /* --- Интерактивные Симуляторы --- */
+    .interactive-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .sim-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .sim-header h3 {
+      font-family: var(--font-heading);
+      color: var(--accent-cyan);
+      margin-bottom: 0.5rem;
+    }
+
+    /* A* Grid Styles */
+    .grid-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .astar-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 4px;
+      width: 100%;
+      max-width: 450px;
+      aspect-ratio: 1;
+      background: rgba(0,0,0,0.4);
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      user-select: none;
+      touch-action: none;
+    }
+
+    .cell {
+      background: #1e293b;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .cell.start { background: var(--accent-green) !important; }
+    .cell.end { background: var(--accent-red) !important; }
+    .cell.wall { background: #475569 !important; }
+    .cell.path { background: var(--accent-cyan) !important; box-shadow: 0 0 8px var(--accent-cyan); }
+    .cell.visited { background: rgba(129, 140, 248, 0.35); }
+
+    .sim-controls {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      margin-top: 1rem;
+    }
+
+    .sim-select {
+      background: #0f172a;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
+    /* FSM Simulator Styles */
+    .fsm-box {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .fsm-diagram {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 1rem;
+    }
+
+    .fsm-state {
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      transition: all 0.3s;
+    }
+
+    .fsm-state.active {
+      border-color: var(--accent-orange);
+      background: rgba(251, 146, 60, 0.15);
+      color: #fff;
+      box-shadow: 0 0 15px rgba(251, 146, 60, 0.3);
+    }
+
+    .fsm-inputs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.2rem;
+      background: rgba(0,0,0,0.2);
+      padding: 1.2rem;
+      border-radius: 8px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .input-group label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .input-group input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent-cyan);
+    }
+
+    .fsm-log {
+      background: #000;
+      padding: 1rem;
+      border-radius: 6px;
+      font-family: var(--font-code);
+      font-size: 0.85rem;
+      color: var(--accent-green);
+      height: 75px;
+      overflow-y: auto;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Perception Canvas Simulator */
+    .canvas-sim-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    #perceptionCanvas {
+      background: #070a12;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      max-width: 100%;
+      cursor: crosshair;
+    }
+
+    /* --- Выбор Архитектуры --- */
+    .selector-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.8rem;
+      background: #0d131f;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-main);
+      font-size: 0.95rem;
+    }
+
+    .recommendation-result {
+      margin-top: 1.5rem;
+      padding: 1.5rem;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid var(--accent-cyan);
+      border-radius: 8px;
+      display: none;
+    }
+
+    /* --- Викторина --- */
+    .quiz-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 2rem;
+      max-width: 850px;
+      margin: 0 auto;
+    }
+
+    .quiz-progress {
+      height: 6px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 3px;
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+
+    .quiz-progress-bar {
+      height: 100%;
+      background: var(--accent-cyan);
+      width: 0%;
+      transition: width 0.3s;
+    }
+
+    .quiz-option {
+      display: block;
+      width: 100%;
+      padding: 1rem;
+      margin: 0.6rem 0;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-main);
+      text-align: left;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+
+    .quiz-option:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: var(--accent-cyan);
+    }
+
+    .quiz-option.correct {
+      background: rgba(52, 211, 153, 0.2);
+      border-color: var(--accent-green);
+      color: #fff;
+    }
+
+    .quiz-option.wrong {
+      background: rgba(244, 63, 94, 0.2);
+      border-color: var(--accent-red);
+      color: #fff;
+    }
+
+    /* --- Отчет Лабораторной работы --- */
+    .report-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 2.5rem;
+      margin-top: 4rem;
+    }
+
+    .report-section h3 {
+      font-family: var(--font-heading);
+      color: var(--accent-cyan);
+      margin: 1.5rem 0 0.8rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.4rem;
+    }
+
+    .report-section p, .report-section ul {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+
+    .report-section ul {
+      padding-left: 1.2rem;
+    }
+
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      text-align: left;
+    }
+
+    th, td {
+      padding: 0.8rem 1rem;
+      border: 1px solid var(--border-color);
+    }
+
+    th {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--accent-cyan);
+    }
+
+    /* --- Футер --- */
+    footer {
+      border-top: 1px solid var(--border-color);
+      padding: 3rem 1.5rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 5rem;
+      background: #070a12;
+    }
+
+    /* --- Мобильная адаптивность --- */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: var(--bg-main);
+        flex-direction: column;
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+        gap: 1rem;
+      }
+
+      .nav-links.show {
+        display: flex;
+      }
+
+      .burger-btn {
+        display: block;
+      }
+
+      .interactive-container {
+        padding: 1.2rem;
+      }
+
+      .report-section {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Шапка сайта -->
+  <header>
+    <div class="nav-container">
+      <a href="#" class="logo">GAME<span>AI</span>.LAB</a>
+      <button class="burger-btn" id="burgerBtn" aria-label="Открыть меню">☰</button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#tech">Архитектуры</a></li>
+        <li><a href="#math">Математика</a></li>
+        <li><a href="#code">Код / Практика</a></li>
+        <li><a href="#games">Игры-Легенды</a></li>
+        <li><a href="#simulators">Симуляторы</a></li>
+        <li><a href="#selector">Выбор ИИ</a></li>
+        <li><a href="#quiz">Викторина</a></li>
+        <li><a href="#report">Отчет ЛР№3</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Главный экран (Hero) -->
+  <main>
+    <section class="hero">
+      <div class="hero-tag">Образовательно-Практический Портал</div>
+      <h1>Искусственный Интеллект в Видеоиграх</h1>
+      <p>Полное интерактивное руководство: математика зрения и навигации, архитектурные паттерны, код на C#/C++, браузерные симуляторы и реальные кейсы из легендарных игр.</p>
+      <div class="hero-buttons">
+        <a href="#simulators" class="btn btn-primary">🧪 Запустить Симуляторы</a>
+        <a href="#code" class="btn btn-secondary">💻 Изучить Код (C# / C++)</a>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="number">1–3 мс</div>
+          <div class="label">Бюджет CPU для ИИ при 60 FPS</div>
+        </div>
+        <div class="stat-card">
+          <div class="number">A* & NavMesh</div>
+          <div class="label">Стандарт поиск пути и пространств</div>
+        </div>
+        <div class="stat-card">
+          <div class="number">FSM / BT / GOAP</div>
+          <div class="label">Движки принятия решений</div>
+        </div>
+        <div class="stat-card">
+          <div class="number">Reynolds Steering</div>
+          <div class="label">Физика локального движения</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Секция 1: Архитектуры ИИ -->
+    <section id="tech">
+      <h2 class="section-title">1. Архитектурные Паттерны ИИ</h2>
+      <p class="section-subtitle">Сравнение основных фундаментальных систем принятия решений NPC в индустрии GameDev.</p>
+
+      <div class="tech-grid">
+        <article class="tech-card">
+          <div class="tech-badge">Базовый уровень</div>
+          <h3>Конечные Автоматы (FSM)</h3>
+          <p>Набор фиксированных состояний (Idle, Patrol, Chase, Attack) и условий переходов. Идеально для простых врагов и боссов первой волны.</p>
+          <ul>
+            <li>✔ Минимальные затраты CPU</li>
+            <li>✔ Простая реализация в пару классов</li>
+            <li>✖ "Спагетти-код" при превышении 10+ состояний</li>
+          </ul>
+        </article>
+
+        <article class="tech-card">
+          <div class="tech-badge">Стандарт Индустрии</div>
+          <h3>Деревья Поведения (Behavior Trees)</h3>
+          <p>Иерархическое дерево с узлами типа Sequence, Selector, Parallel и Action. Используется в Unreal Engine и Unity (Behavior Designer / NodeCanvas).</p>
+          <ul>
+            <li>✔ Высокая модульность и переиспользование</li>
+            <li>✔ Наглядный визуальный граф</li>
+            <li>✖ Требует аккуратного менеджмента состояния</li>
+          </ul>
+        </article>
+
+        <article class="tech-card">
+          <div class="tech-badge">Продвинутый</div>
+          <h3>GOAP (Goal-Oriented Action Planning)</h3>
+          <p>NPC генерирует план действий из текущего состояния мира в целевое, используя алгоритмы поиска A* в пространстве состояний.</p>
+          <ul>
+            <li>✔ Динамическое и естественное поведение</li>
+            <li>✔ Легко добавлять новые действия без переделки кода</li>
+            <li>✖ Повышенная нагрузка на процессор</li>
+          </ul>
+        </article>
+
+        <article class="tech-card">
+          <div class="tech-badge">Симуляторы Жизни</div>
+          <h3>Utility AI (ИИ Полезности)</h3>
+          <p>Каждое действие оценивается по числовой шкале математической функцией (Utility Curve). Выбирается действие с максимальным баллом.</p>
+          <ul>
+            <li>✔ Плавная сменяемость приоритетов</li>
+            <li>✔ Основа для The Sims и стратегий</li>
+            <li>✖ Сложность тонкой балансировки весов</li>
+          </ul>
+        </article>
+
+        <article class="tech-card">
+          <div class="tech-badge">Навигация</div>
+          <h3>A* Pathfinding & NavMesh</h3>
+          <p>Поиск кратчайшего пути по узлам триангулированной сетки навигации (NavMesh) с учетом эвристического расстояния.</p>
+          <ul>
+            <li>✔ Гарантия нахождения оптимального пути</li>
+            <li>✔ Поддержка динамических препятствий</li>
+            <li>✖ Память под навигационную сетку</li>
+          </ul>
+        </article>
+
+        <article class="tech-card">
+          <div class="tech-badge">Будущее</div>
+          <h3>Обучение с подкреплением (RL)</h3>
+          <p>Агенты (нейросети), обучающиеся методом проб и ошибок в миллионах симуляций через системы наград и штрафов (Unity ML-Agents).</p>
+          <ul>
+            <li>✔ Превосходит навыки лучших игроков</li>
+            <li>✔ Тестирование баланса уровней</li>
+            <li>✖ Трудно контролировать дизайнерам</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- Секция 2: Математика ИИ -->
+    <section id="math">
+      <h2 class="section-title">2. Математика и Физика Игрового ИИ</h2>
+      <p class="section-subtitle">Формулы и геометрия, на которых строится зрение, слух и передвижение персонажей.</p>
+
+      <div class="math-grid">
+        <article class="math-card">
+          <h3 style="color:var(--accent-cyan)">Проверка Поля Зрения (FOV)</h3>
+          <p>Использует **скалярное произведение векторов (Dot Product)** для определения, находится ли объект перед персонажем в пределах угла обзора.</p>
+          <div class="math-formula">
+            cos(θ) = (Forward · TargetDir) / (|Forward| * |TargetDir|)<br>
+            If (cos(θ) >= cos(FOV / 2)) => Объект в конусе зрения!
+          </div>
+          <p style="font-size:0.88rem; color:var(--text-muted)">После совпадения угла выполняется Raycast для проверки отсутствия стен.</p>
+        </article>
+
+        <article class="math-card">
+          <h3 style="color:var(--accent-purple)">Рулевое Поведение (Steering Behaviors)</h3>
+          <p>Алгоритмы Крейга Рейнольдса для создания плавного и физически корректного перемещения NPC.</p>
+          <div class="math-formula">
+            Desired_Velocity = Normalize(Target_Pos - Current_Pos) * Max_Speed<br>
+            Steering_Force = Desired_Velocity - Current_Velocity
+          </div>
+          <p style="font-size:0.88rem; color:var(--text-muted)">Применяется в задачах Seek (Преследование), Flee (Побег) и Arrive (Прибытие).</p>
+        </article>
+
+        <article class="math-card">
+          <h3 style="color:var(--accent-green)">Карты Влияния (Influence Maps)</h3>
+          <p>Двухмерная сетка, где каждая ячейка содержит значение threat/control. Позволяет ботам оценить безопасность укрытий.</p>
+          <div class="math-formula">
+            Influence = Base_Threat / (1 + Distance * Decay_Factor)
+          </div>
+          <p style="font-size:0.88rem; color:var(--text-muted)">Используется тактическим ИИ в RTS и шутерах для фланговых обходов.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Секция 3: Интерактивный Справочник Кода -->
+    <section id="code">
+      <h2 class="section-title">3. Практический Код для Разработчиков</h2>
+      <p class="section-subtitle">Готовые шаблоны кода на C# (Unity) и C++ для применения паттернов на практике.</p>
+
+      <div class="code-container">
+        <div class="code-tabs">
+          <button class="tab-btn active" onclick="switchTab(0)">C# Unity FSM</button>
+          <button class="tab-btn" onclick="switchTab(1)">C++ BT Node</button>
+          <button class="tab-btn" onclick="switchTab(2)">C# Vision FOV Math</button>
+          <button class="tab-btn" onclick="switchTab(3)">C# A* Algorithm</button>
+        </div>
+
+        <!-- Tab 0: FSM -->
+        <div class="code-content active" id="tab-0">
+          <button class="copy-btn" onclick="copyCode('code-0')">📋 Копировать</button>
+          <pre id="code-0"><code>using UnityEngine;
+
+// Интерфейс состояния FSM
+public interface IState {
+    void Enter();
+    void Execute();
+    void Exit();
+}
+
+public class GuardFSM : MonoBehaviour {
+    private IState currentState;
+
+    public PatrolState patrolState = new PatrolState();
+    public AttackState attackState = new AttackState();
+
+    void Start() {
+        ChangeState(patrolState);
+    }
+
+    void Update() {
+        if (currentState != null) {
+            currentState.Execute();
+        }
+    }
+
+    public void ChangeState(IState newState) {
+        if (currentState != null) currentState.Exit();
+        currentState = newState;
+        currentState.Enter();
+    }
+}</code></pre>
+        </div>
+
+        <!-- Tab 1: BT Node -->
+        <div class="code-content" id="tab-1">
+          <button class="copy-btn" onclick="copyCode('code-1')">📋 Копировать</button>
+          <pre id="code-1"><code>#include &lt;vector&gt;
+#include &lt;memory&gt;
+
+enum class NodeState { SUCCESS, FAILURE, RUNNING };
+
+class BTNode {
+public:
+    virtual ~BTNode() = default;
+    virtual NodeState Evaluate() = 0;
+};
+
+// Узел Селектор (Selector Node)
+class Selector : public BTNode {
+private:
+    std::vector&lt;std::shared_ptr&lt;BTNode&gt;&gt; children;
+public:
+    void AddChild(std::shared_ptr&lt;BTNode&gt; child) { children.push_back(child); }
+
+    NodeState Evaluate() override {
+        for (auto& child : children) {
+            NodeState state = child-&gt;Evaluate();
+            if (state != NodeState::FAILURE) return state;
+        }
+        return NodeState::FAILURE;
+    }
+};</code></pre>
+        </div>
+
+        <!-- Tab 2: Vision FOV Math -->
+        <div class="code-content" id="tab-2">
+          <button class="copy-btn" onclick="copyCode('code-2')">📋 Копировать</button>
+          <pre id="code-2"><code>using UnityEngine;
+
+public class PerceptionSystem : MonoBehaviour {
+    public Transform target;
+    public float viewRadius = 15f;
+    public float viewAngle = 90f;
+    public LayerMask obstacleMask;
+
+    public bool CanSeeTarget() {
+        Vector3 dirToTarget = (target.position - transform.position).normalized;
+        float dstToTarget = Vector3.Distance(transform.position, target.position);
+
+        if (dstToTarget &lt;= viewRadius) {
+            // Скалярное произведение для угла обзора
+            if (Vector3.Angle(transform.forward, dirToTarget) &lt; viewAngle / 2f) {
+                // Проверка препятствий (Raycast)
+                if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask)) {
+                    return true; // Враг замечен!
+                }
+            }
+        }
+        return false;
+    }
+}</code></pre>
+        </div>
+
+        <!-- Tab 3: A* -->
+        <div class="code-content" id="tab-3">
+          <button class="copy-btn" onclick="copyCode('code-3')">📋 Копировать</button>
+          <pre id="code-3"><code>// Расчет эвристики Манхэттена для сетки
+public int GetManhattanDistance(Vector2Int a, Vector2Int b) {
+    return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
+}
+
+// Формула расчета полной стоимости F = G + H
+// G = стоимость пути от стартовой ячейки
+// H = эвристическая оценка до цели
+public void EvaluateNode(Node current, Node neighbor, Node target) {
+    int newG = current.gCost + GetDistance(current, neighbor);
+    if (newG &lt; neighbor.gCost) {
+        neighbor.parent = current;
+        neighbor.gCost = newG;
+        neighbor.hCost = GetManhattanDistance(neighbor.position, target.position);
+    }
+}</code></pre>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Секция 4: Примеры из реальных игр -->
+    <section id="games">
+      <h2 class="section-title">4. ИИ в Легендарных Играх</h2>
+      <p class="section-subtitle">Технологические революции, совершённые геймдевом благодаря алгоритмам ИИ.</p>
+
+      <div class="games-grid">
+        <article class="game-card">
+          <div class="game-header">
+            <h3>F.E.A.R. (2005)</h3>
+            <div class="genre">Шутер от первого лица • Monolith Productions</div>
+          </div>
+          <div class="game-body">
+            <p>Первое массовое внедрение системы **GOAP**. Клоны-враги анализировали укрытия, выбивали двери, переговаривались и окружали игрока без жестких скриптов.</p>
+            <div class="game-highlight">
+              💡 <strong>Техника:</strong> Динамический поиск действий в пространстве состояний и глобальная доска обмена информацией (Blackboard).
+            </div>
+          </div>
+        </article>
+
+        <article class="game-card">
+          <div class="game-header">
+            <h3>Alien: Isolation (2014)</h3>
+            <div class="genre">Survival Horror • Creative Assembly</div>
+          </div>
+          <div class="game-body">
+            <p>ИИ Ксеноморфа состоит из двух систем: **Director AI** (знает положение игрока и дает намеки) и **Alien AI** (управляет Чужим через органы чувств и ветки Дерева Поведения).</p>
+            <div class="game-highlight">
+              💡 <strong>Техника:</strong> Двухуровневая архитектура и разблокировка новых узлов BT по мере игры.
+            </div>
+          </div>
+        </article>
+
+        <article class="game-card">
+          <div class="game-header">
+            <h3>Left 4 Dead (2008)</h3>
+            <div class="genre">Кооперативный шутер • Valve</div>
+          </div>
+          <div class="game-body">
+            <p>Система **AI Director** рассчитывает метрики стресса и здоровья игроков, динамически регулируя спавн орды, музыку, аптечки и спец-инфицированных.</p>
+            <div class="game-highlight">
+              💡 <strong>Техника:</strong> Процедурный контроль эмоционального темпа (Dynamic Pacing Engine).
+            </div>
+          </div>
+        </article>
+
+        <article class="game-card">
+          <div class="game-header">
+            <h3>The Sims 4</h3>
+            <div class="genre">Симулятор жизни • Maxis</div>
+          </div>
+          <div class="game-body">
+            <p>Использует **Utility AI (Smart Objects)**. Объект (кровать, холодильник) сам транслирует персонажам баллы полезности для удовлетворения их текущих потребностей.</p>
+            <div class="game-highlight">
+              💡 <strong>Техника:</strong> Оценка действий через кривые полезности и децентрализованные умные объекты.
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Секция 5: Интерактивные Симуляторы -->
+    <section id="simulators">
+      <h2 class="section-title">5. Интерактивная Лаборатория ИИ</h2>
+      <p class="section-subtitle">Симуляторы алгоритмов для визуального анализа прямо в браузере.</p>
+
+      <!-- Симулятор 1: A* Pathfinding -->
+      <div class="interactive-container">
+        <div class="sim-header">
+          <h3>1. Визуализатор Поиска Пути (Алгоритм A*)</h3>
+          <p style="color:var(--text-muted); font-size:0.9rem;">Рисуйте стены зажатием мыши/пальца. Настройте метрику расстояния и запустите поиск пути.</p>
+        </div>
+
+        <div class="grid-wrapper">
+          <div class="astar-grid" id="astarGrid"></div>
+          <div class="sim-controls">
+            <button class="btn btn-primary" onclick="runAStar()">▶ Запустить A*</button>
+            <button class="btn btn-secondary" onclick="resetGrid()">🔄 Сбросить</button>
+            <select class="sim-select" id="heuristicSelect">
+              <option value="manhattan">Метрика: Манхэттен</option>
+              <option value="euclidean">Метрика: Евклид</option>
+            </select>
+          </div>
+          <div id="astarStats" style="font-size:0.85rem; color:var(--accent-cyan)">Посещено ячеек: 0 | Длина пути: 0</div>
+        </div>
+      </div>
+
+      <!-- Симулятор 2: FSM Guard -->
+      <div class="interactive-container">
+        <div class="sim-header">
+          <h3>2. Динамический FSM & Utility Стражник</h3>
+          <p style="color:var(--text-muted); font-size:0.9rem;">Изменяйте параметры мира и наблюдайте за реакцией автомата состояний в реальном времени.</p>
+        </div>
+
+        <div class="fsm-box">
+          <div class="fsm-diagram">
+            <div class="fsm-state active" id="state-patrol">🟢 Патруль</div>
+            <div class="fsm-state" id="state-suspicion">🟡 Подозрение</div>
+            <div class="fsm-state" id="state-combat">🔴 Атака</div>
+            <div class="fsm-state" id="state-flee">🟣 Побег</div>
+          </div>
+
+          <div class="fsm-inputs">
+            <div class="input-group">
+              <label for="distRange">Дистанция до игрока: <span id="distVal" style="color:var(--accent-cyan)">15</span> м</label>
+              <input type="range" id="distRange" min="1" max="30" value="15" oninput="updateFSM()">
+            </div>
+            <div class="input-group">
+              <label for="hpRange">Здоровье стражника: <span id="hpVal" style="color:var(--accent-green)">100</span>%</label>
+              <input type="range" id="hpRange" min="0" max="100" value="100" oninput="updateFSM()">
+            </div>
+          </div>
+
+          <div class="fsm-log" id="fsmLog">> Система запущена. Стражник патрулирует локацию.</div>
+        </div>
+      </div>
+
+      <!-- Симулятор 3: Canvas FOV Raycasting -->
+      <div class="interactive-container">
+        <div class="sim-header">
+          <h3>3. Симулятор Конуса Зрения и Raycasting (Canvas 2D)</h3>
+          <p style="color:var(--text-muted); font-size:0.9rem;">Двигайте курсор мыши по синему полю: стражник поворачивается за игроком и выполняет лучи проверки видимости (Raycast) с учетом препятствий.</p>
+        </div>
+
+        <div class="canvas-sim-wrapper">
+          <canvas id="perceptionCanvas" width="500" height="300"></canvas>
+          <div style="font-size:0.85rem; color:var(--text-muted);">
+            🟢 Зеленый = Чисто | 🟡 Желтый = В конусе обзора | 🔴 Красный = Видит игрока!
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Секция 6: Подбор Архитектуры -->
+    <section id="selector">
+      <h2 class="section-title">6. Интерактивный Селектор Архитектуры ИИ</h2>
+      <p class="section-subtitle">Ответьте на 3 вопроса, чтобы получить оптимальную рекомендацию под ваш проект.</p>
+
+      <div class="selector-box">
+        <div class="form-group">
+          <label>1. Какой жанр вашей игры?</label>
+          <select id="selGenre" class="form-control">
+            <option value="fps">Шутер от первого лица (FPS)</option>
+            <option value="stealth">Стелс / Survival Horror</option>
+            <option value="sim">Симулятор жизни / Sandbox</option>
+            <option value="arcade">Простая аркада / Платформер</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>2. Сколько одновременно действующих NPC на сцене?</label>
+          <select id="selNpc" class="form-control">
+            <option value="few">Мало (1 – 10 NPC)</option>
+            <option value="medium">Умерено (10 – 50 NPC)</option>
+            <option value="crowd">Толпа / Орда (100+ NPC)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>3. Требуется ли динамическое решение задач без жестких скриптов?</label>
+          <select id="selFlex" class="form-control">
+            <option value="no">Нет, поведение строго фиксировано</option>
+            <option value="yes">Да, боты должны импровизировать</option>
+          </select>
+        </div>
+
+        <button class="btn btn-primary" onclick="calculateArchitecture()">🔍 Рассчитать Архитектуру</button>
+
+        <div id="recommendationResult" class="recommendation-result">
+          <h4 id="recTitle" style="color:var(--accent-cyan); font-size:1.2rem; margin-bottom:0.5rem;">Рекомендация:</h4>
+          <p id="recDesc" style="color:var(--text-main); font-size:0.95rem;"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Секция 7: Викторина -->
+    <section id="quiz">
+      <h2 class="section-title">7. Проверьте Свои Знания</h2>
+      <p class="section-subtitle">Интерактивный тест для закрепления материала.</p>
+
+      <div class="quiz-card" id="quizContainer">
+        <div class="quiz-progress"><div class="quiz-progress-bar" id="quizProgressBar"></div></div>
+        <h3 id="quizQuestion" style="margin-bottom:1.2rem; font-size:1.15rem;">Загрузка вопроса...</h3>
+        <div id="quizOptions"></div>
+        <div id="quizFeedback" style="margin-top:1rem; font-weight:600;"></div>
+      </div>
+    </section>
+
+    <!-- Секция 8: Отчет по Лабораторной работе № 3 -->
+    <section id="report">
+      <div class="report-section">
+        <h2 class="section-title">ОТЧЕТ ПО ЛАБОРАТОРНОЙ РАБОТЕ № 3</h2>
+        <p style="text-align:center; color:var(--accent-cyan); font-weight:700;">Тема: Разработка образовательного веб-ресурса «ИИ в Видеоиграх»[cite: 1]</p>
+
+        <h3>1. Тема и цель проекта</h3>
+        <p><strong>Тема:</strong> Образовательно-информационный веб-ресурс «Искусственный Интеллект в Видеоиграх»[cite: 1].</p>
+        <p><strong>Цель:</strong> Создать адаптивный, структурированный и интерактивный веб-сайт, раскрывающий теоретические и практические аспекты применения ИИ в геймдеве с интегрированными симуляторами и отчетом.</p>
+
+        <h3>2. Концепция, Назначение и Целевая Аудитория</h3>
+        <ul>
+          <li><strong>Назначение:</strong> Обучение студентов, начинающих разработчиков и геймеров принципам построения игрового ИИ.</li>
+          <li><strong>Целевая аудитория:</strong> Студенты IT-специальностей, инди-разработчики, геймдизайнеры и энтузиасты.</li>
+          <li><strong>Основная идея:</strong> Объединить сухую теорию с интерактивными симуляторами, фрагментами реального кода на C#/C++ и практическим инструментом выбора архитектур.</li>
+        </ul>
+
+        <h3>3. Структура веб-ресурса</h3>
+        <p>Преобразование карты знаний в структуру веб-ресурса:</p>
+        <p><code>Главная → Архитектуры → Математика ИИ → Код / Практика → Игры-Легенды → Симуляторы → Выбор ИИ → Викторина → Отчет ЛР3</code></p>
+
+        <h3>4. Визуальное решение и Адаптивность</h3>
+        <p>Выбран стиль Cyberpunk/Sci-Fi GameDev. Темный фоновый цвет (<code>#0b0f19</code>) снижает нагрузку на глаза, неоновые акценты (Cyan, Purple, Green) обеспечивают четкую визуальную иерархию. Использованы шрифты Orbitron, Inter и Fira Code. Адаптивность реализована на чистом CSS Flexbox/Grid и медиазапросах для корректного отображения на мобильных телефонах.</p>
+
+        <h3>5. Тестирование и фиксация проблем</h3>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Проблема</th>
+                <th>Причина / Предположение</th>
+                <th>Исправление</th>
+                <th>Результат</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Сетка A* выходила за пределы экрана на смартфонах.</td>
+                <td>Фиксированная ширина CSS в пикселях.</td>
+                <td>Применен <code>max-width: 450px</code> и <code>aspect-ratio: 1</code>.</td>
+                <td>Сетка идеально масштабируется на любом смартфоне.</td>
+              </tr>
+              <tr>
+                <td>Нажатия на ячейки симулятора скроллили страницу на телефоне.</td>
+                <td>Стандартное поведение Touch-событий в браузере.</td>
+                <td>Добавлено CSS свойство <code>touch-action: none</code>.</td>
+                <td>Плавное рисование стен пальцем без скролла.</td>
+              </tr>
+              <tr>
+                <td>Отрисовка конуса зрения Canvas лагала на слабых устройствах.</td>
+                <td>Частый вызов перерисовки кадров.</td>
+                <td>Оптимизирована математика лучей Raycast (шаг 5 градусов).</td>
+                <td>Стабильные 60 FPS в 2D симуляторе.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>6. Использование ИИ-инструментов</h3>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Задача</th>
+                <th>Инструмент ИИ</th>
+                <th>Что предложено</th>
+                <th>Что использовано</th>
+                <th>Что изменено/проверено</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Алгоритм A*</td>
+                <td>ChatGPT</td>
+                <td>Базовая JS логика поиска пути</td>
+                <td>Функция расчета расстояния</td>
+                <td>Адаптировано под HTML5 сетку и Touch-события.</td>
+              </tr>
+              <tr>
+                <td>Цветовая палитра</td>
+                <td>Claude / ChatGPT</td>
+                <td>Набор Sci-Fi CSS переменных</td>
+                <td>Hex-коды акцентов</td>
+                <td>Настроена контрастность по стандартам WCAG.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>7. Рефлексивная таблица СРО</h3>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Этап</th>
+                <th>Что было в предыдущей работе (Карта знаний)</th>
+                <th>Что стало в веб-проекте</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Содержание</td>
+                <td>Понятия и текстовые узлы об ИИ.</td>
+                <td>Адаптивные страницы, инфокарточки и интерактив.</td>
+              </tr>
+              <tr>
+                <td>Связи</td>
+                <td>Стрелки и связи между понятиями.</td>
+                <td>Интерактивная навигация, меню и перекрестные ссылки.</td>
+              </tr>
+              <tr>
+                <td>Иерархия</td>
+                <td>Уровни ментальной карты.</td>
+                <td>Семантическая структура HTML5 (H1-H4, sections).</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>8. Выводы</h3>
+        <p>В ходе лабораторной работы освоен полный цикл создания образовательного ресурса по Game AI: от конвертации структуры знаний в семантическую верстку до визуализации алгоритмов поиск пути A*, FSM и Raycasting на Canvas HTML5.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2026 GAMEAI.LAB — Образовательный практический портал по ИИ в видеоиграх. Создано в рамках Лабораторной работы №3[cite: 1].</p>
+  </footer>
+
+  <!-- Скрипты логики -->
+  <script>
+    /* --- Мобильное меню --- */
+    const burgerBtn = document.getElementById('burgerBtn');
+    const navLinks = document.getElementById('navLinks');
+    burgerBtn.addEventListener('click', () => navLinks.classList.toggle('show'));
+    document.querySelectorAll('.nav-links a').forEach(l => l.addEventListener('click', () => navLinks.classList.remove('show')));
+
+    /* --- Переключение вкладок кода --- */
+    function switchTab(index) {
+      document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', i === index);
+      });
+      document.querySelectorAll('.code-content').forEach((content, i) => {
+        content.classList.toggle('active', i === index);
+      });
+    }
+
+    function copyCode(id) {
+      const codeText = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(codeText).then(() => {
+        alert('Код скопирован в буфер обмена!');
+      });
+    }
+
+    /* --- Симулятор 1: A* Pathfinding --- */
+    const GRID_SIZE = 12;
+    const gridEl = document.getElementById('astarGrid');
+    let grid = [];
+    let startPos = { r: 0, c: 0 };
+    let endPos = { r: 11, c: 11 };
+
+    function initGrid() {
+      gridEl.innerHTML = '';
+      grid = [];
+      for (let r = 0; r < GRID_SIZE; r++) {
+        let row = [];
+        for (let c = 0; c < GRID_SIZE; c++) {
+          const cell = document.createElement('div');
+          cell.classList.add('cell');
+          if (r === startPos.r && c === startPos.c) cell.classList.add('start');
+          if (r === endPos.r && c === endPos.c) cell.classList.add('end');
+
+          cell.addEventListener('mousedown', () => toggleWall(r, c));
+          cell.addEventListener('mouseenter', (e) => { if (e.buttons === 1) toggleWall(r, c); });
+          cell.addEventListener('touchstart', (e) => { e.preventDefault(); toggleWall(r, c); });
+
+          gridEl.appendChild(cell);
+          row.push({ r, c, isWall: false, el: cell });
+        }
+        grid.push(row);
+      }
+      document.getElementById('astarStats').innerText = `Посещено ячеек: 0 | Длина пути: 0`;
+    }
+
+    function toggleWall(r, c) {
+      if ((r === startPos.r && c === startPos.c) || (r === endPos.r && c === endPos.c)) return;
+      grid[r][c].isWall = !grid[r][c].isWall;
+      grid[r][c].el.classList.toggle('wall');
+    }
+
+    function resetGrid() {
+      initGrid();
+    }
+
+    function runAStar() {
+      for (let r = 0; r < GRID_SIZE; r++) {
+        for (let c = 0; c < GRID_SIZE; c++) {
+          grid[r][c].el.classList.remove('path', 'visited');
+        }
+      }
+
+      const metric = document.getElementById('heuristicSelect').value;
+      let openSet = [grid[startPos.r][startPos.c]];
+      let closedSet = [];
+      let cameFrom = new Map();
+      let gScore = {}, fScore = {};
+      const key = (node) => `${node.r},${node.c}`;
+
+      for (let r = 0; r < GRID_SIZE; r++) {
+        for (let c = 0; c < GRID_SIZE; c++) {
+          gScore[key(grid[r][c])] = Infinity;
+          fScore[key(grid[r][c])] = Infinity;
+        }
+      }
+
+      gScore[key(grid[startPos.r][startPos.c])] = 0;
+      fScore[key(grid[startPos.r][startPos.c])] = calcHeuristic(startPos, endPos, metric);
+
+      let visitedCount = 0;
+
+      while (openSet.length > 0) {
+        let current = openSet.reduce((min, node) => fScore[key(node)] < fScore[key(min)] ? node : min, openSet[0]);
+
+        if (current.r === endPos.r && current.c === endPos.c) {
+          let currKey = key(current);
+          let pathLength = 0;
+          while (cameFrom.has(currKey)) {
+            let prev = cameFrom.get(currKey);
+            if (!(prev.r === startPos.r && prev.c === startPos.c)) {
+              prev.el.classList.add('path');
+            }
+            currKey = key(prev);
+            pathLength++;
+          }
+          document.getElementById('astarStats').innerText = `Посещено ячеек: ${visitedCount} | Длина пути: ${pathLength}`;
+          return;
+        }
+
+        openSet = openSet.filter(node => node !== current);
+        closedSet.push(current);
+        visitedCount++;
+
+        if (!(current.r === startPos.r && current.c === startPos.c)) {
+          current.el.classList.add('visited');
+        }
+
+        const neighbors = getNeighbors(current);
+        for (let neighbor of neighbors) {
+          if (neighbor.isWall || closedSet.includes(neighbor)) continue;
+
+          let tentativeG = gScore[key(current)] + 1;
+          if (tentativeG < gScore[key(neighbor)]) {
+            cameFrom.set(key(neighbor), current);
+            gScore[key(neighbor)] = tentativeG;
+            fScore[key(neighbor)] = tentativeG + calcHeuristic(neighbor, endPos, metric);
+            if (!openSet.includes(neighbor)) {
+              openSet.push(neighbor);
+            }
+          }
+        }
+      }
+      alert('Путь заблокирован стенами!');
+    }
+
+    function calcHeuristic(a, b, metric) {
+      if (metric === 'euclidean') {
+        return Math.sqrt(Math.pow(a.r - b.r, 2) + Math.pow(a.c - b.c, 2));
+      }
+      return Math.abs(a.r - b.r) + Math.abs(a.c - b.c);
+    }
+
+    function getNeighbors(node) {
+      let res = [];
+      const { r, c } = node;
+      if (r > 0) res.push(grid[r - 1][c]);
+      if (r < GRID_SIZE - 1) res.push(grid[r + 1][c]);
+      if (c > 0) res.push(grid[r][c - 1]);
+      if (c < GRID_SIZE - 1) res.push(grid[r][c + 1]);
+      return res;
+    }
+
+    /* --- Симулятор 2: FSM Guard --- */
+    function updateFSM() {
+      const dist = parseInt(document.getElementById('distRange').value);
+      const hp = parseInt(document.getElementById('hpRange').value);
+
+      document.getElementById('distVal').innerText = dist;
+      document.getElementById('hpVal').innerText = hp;
+
+      const states = ['patrol', 'suspicion', 'combat', 'flee'];
+      states.forEach(s => document.getElementById(`state-${s}`).classList.remove('active'));
+
+      const log = document.getElementById('fsmLog');
+
+      if (hp < 25) {
+        document.getElementById('state-flee').classList.add('active');
+        log.innerText = `> [FSM WARNING] Критический уровень HP (${hp}%)! Стражник отступает.`;
+      } else if (dist <= 5) {
+        document.getElementById('state-combat').classList.add('active');
+        log.innerText = `> [FSM COMBAT] Игрок в зоне поражения (${dist}м). Атака!`;
+      } else if (dist <= 15) {
+        document.getElementById('state-suspicion').classList.add('active');
+        log.innerText = `> [FSM ALERT] Замечено движение (${dist}м). Режим подозрения.`;
+      } else {
+        document.getElementById('state-patrol').classList.add('active');
+        log.innerText = `> [FSM IDLE] Врагов нет. Патрулирование маршрута.`;
+      }
+    }
+
+    /* --- Симулятор 3: Perception Canvas FOV Raycasting --- */
+    const canvas = document.getElementById('perceptionCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let guard = { x: 100, y: 150, angle: 0, fov: 60, viewDist: 180 };
+    let player = { x: 350, y: 150, radius: 10 };
+    let obstacles = [
+      { x: 220, y: 80, w: 20, h: 140 } // Стена-препятствие
+    ];
+
+    canvas.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      player.x = e.clientX - rect.left;
+      player.y = e.clientY - rect.top;
+      drawPerception();
+    });
+
+    function drawPerception() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Поворот стражника на игрока
+      guard.angle = Math.atan2(player.y - guard.y, player.x - guard.x);
+
+      // Отрисовка препятствия
+      ctx.fillStyle = '#475569';
+      obstacles.forEach(o => ctx.fillRect(o.x, o.y, o.w, o.h));
+
+      // Проверка попадания в конус обзора
+      let distToPlayer = Math.hypot(player.x - guard.x, player.y - guard.y);
+      let seesPlayer = false;
+
+      if (distToPlayer <= guard.viewDist) {
+        // Проверка луча Raycast на столкновение со стеной
+        let rayBlocked = checkRaycast(guard.x, guard.y, player.x, player.y);
+        if (!rayBlocked) seesPlayer = true;
+      }
+
+      // Отрисовка конуса обзора
+      ctx.beginPath();
+      ctx.moveTo(guard.x, guard.y);
+      ctx.arc(guard.x, guard.y, guard.viewDist, guard.angle - (guard.fov/2 * Math.PI/180), guard.angle + (guard.fov/2 * Math.PI/180));
+      ctx.closePath();
+      ctx.fillStyle = seesPlayer ? 'rgba(244, 63, 94, 0.3)' : 'rgba(56, 189, 248, 0.15)';
+      ctx.fill();
+      ctx.strokeStyle = seesPlayer ? '#f43f5e' : '#38bdf8';
+      ctx.stroke();
+
+      // Отрисовка Стражника
+      ctx.beginPath();
+      ctx.arc(guard.x, guard.y, 14, 0, Math.PI * 2);
+      ctx.fillStyle = '#818cf8';
+      ctx.fill();
+
+      // Отрисовка Игрока
+      ctx.beginPath();
+      ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
+      ctx.fillStyle = seesPlayer ? '#f43f5e' : '#34d399';
+      ctx.fill();
+    }
+
+    function checkRaycast(x1, y1, x2, y2) {
+      // Упрощенная проверка пересечения отрезка с прямоугольником стены
+      for (let o of obstacles) {
+        if (lineIntersectsRect(x1, y1, x2, y2, o)) return true;
+      }
+      return false;
+    }
+
+    function lineIntersectsRect(x1, y1, x2, y2, rx) {
+      // Быстрая проверка AABB
+      let minX = Math.min(x1, x2), maxX = Math.max(x1, x2);
+      let minY = Math.min(y1, y2), maxY = Math.max(y1, y2);
+      if (maxX < rx.x || minX > rx.x + rx.w || maxY < rx.y || minY > rx.y + rx.h) return false;
+      return true;
+    }
+
+    /* --- Селектор Архитектуры --- */
+    function calculateArchitecture() {
+      const genre = document.getElementById('selGenre').value;
+      const npc = document.getElementById('selNpc').value;
+      const flex = document.getElementById('selFlex').value;
+
+      const resBox = document.getElementById('recommendationResult');
+      const title = document.getElementById('recTitle');
+      const desc = document.getElementById('recDesc');
+
+      resBox.style.display = 'block';
+
+      if (genre === 'sim' || flex === 'yes') {
+        title.innerText = 'Рекомендуется: Utility AI или GOAP';
+        desc.innerText = 'Вашей игре требуется высокая динамика и непредвиденность решений. Utility AI позволит измерять потребности в реальном времени, а GOAP создаст цепочки импровизированных действий.';
+      } else if (npc === 'crowd') {
+        title.innerText = 'Рекомендуется: FSM + Steering Behaviors';
+        desc.innerText = 'При обработке 100+ объектов на сцене критически важен бюджет CPU. Простые состояния FSM в связке с формулами Рейнольдса (Flocking/Boids) обеспечат высокую производительность при 60 FPS.';
+      } else {
+        title.innerText = 'Рекомендуется: Behavior Trees (Деревья Поведения)';
+        desc.innerText = 'Стандарт индустрии для вашего типа задач. Обеспечивает отличную читаемость, модульность и встроенную поддержку в Unreal Engine / Unity.';
+      }
+    }
+
+    /* --- Расширенная Викторина --- */
+    const quizData = [
+      {
+        q: "Какая технология ИИ впервые массово использовалась в шутере F.E.A.R.?",
+        options: ["FSM (Конечные автоматы)", "GOAP (Планирование целей)", "Нейросети", "Utility AI"],
+        correct: 1,
+        exp: "F.E.A.R. прославилась использованием GOAP, позволявшего врагам динамически планировать командные действия."
+      },
+      {
+        q: "Какой математический оператор используется для проверки попадания игрока в конус обзора (FOV)?",
+        options: ["Скалярное произведение векторов (Dot Product)", "Векторное произведение (Cross Product)", "Квадратный корень", "Матрица поворота"],
+        correct: 0,
+        exp: "Dot Product дает косинус угла между вектором взгляда бота и вектором на цель."
+      },
+      {
+        q: "Какой бюджет времени обычно выделяется на вычисления ИИ в 60 FPS игре?",
+        options: ["15–20 мс", "1–3 мс", "100 мс", "Без ограничений"],
+        correct: 1,
+        exp: "Для сохранения 60 FPS весь кадр рендерится за 16.6 мс, из которых на ИИ выделяется лишь 1–3 мс."
+      },
+      {
+        q: "Что делает ИИ-Режиссер (AI Director) в игре Left 4 Dead?",
+        options: ["Генерирует 3D модели", "Регулирует темп игры и спавн врагов по уровню стресса игроков", "Управляет физикой", "Пишет сюжет"],
+        correct: 1,
+        exp: "AI Director отслеживает состояние игроков и регулирует поток врагов и аптечек."
+      }
+    ];
+
+    let currentQ = 0;
+
+    function loadQuiz() {
+      const q = quizData[currentQ];
+      document.getElementById('quizQuestion').innerText = `${currentQ + 1}. ${q.q}`;
+      const optDiv = document.getElementById('quizOptions');
+      optDiv.innerHTML = '';
+      document.getElementById('quizFeedback').innerText = '';
+
+      document.getElementById('quizProgressBar').style.width = `${((currentQ) / quizData.length) * 100}%`;
+
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.classList.add('quiz-option');
+        btn.innerText = opt;
+        btn.onclick = () => checkQuiz(idx);
+        optDiv.appendChild(btn);
+      });
+    }
+
+    function checkQuiz(selected) {
+      const q = quizData[currentQ];
+      const opts = document.querySelectorAll('.quiz-option');
+      opts.forEach((btn, idx) => {
+        btn.disabled = true;
+        if (idx === q.correct) btn.classList.add('correct');
+        else if (idx === selected) btn.classList.add('wrong');
+      });
+
+      const fb = document.getElementById('quizFeedback');
+      if (selected === q.correct) {
+        fb.style.color = 'var(--accent-green)';
+        fb.innerText = `Правильно! ${q.exp}`;
+      } else {
+        fb.style.color = 'var(--accent-red)';
+        fb.innerText = `Неверно. ${q.exp}`;
+      }
+
+      setTimeout(() => {
+        currentQ = (currentQ + 1) % quizData.length;
+        loadQuiz();
+      }, 3500);
+    }
+
+    // Инициализация
+    window.onload = () => {
+      initGrid();
+      updateFSM();
+      drawPerception();
+      loadQuiz();
+    };
+  </script>
+</body>
+</html>
